@@ -1,0 +1,233 @@
+@model GestaoObras.Models.Obra
+
+@{
+    ViewData["Title"] = "Detalhes da Obra";
+}
+
+<h2 class="mb-3">@Model.Nome</h2>
+
+<ul class="nav nav-tabs" id="obraTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="dados-tab" data-bs-toggle="tab" data-bs-target="#dados" type="button" role="tab">Dados Gerais</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="materiais-tab" data-bs-toggle="tab" data-bs-target="#materiais" type="button" role="tab">Registo de Material</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="mao-tab" data-bs-toggle="tab" data-bs-target="#mao" type="button" role="tab">Registo de Mão de Obra</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pagamentos-tab" data-bs-toggle="tab" data-bs-target="#pagamentos" type="button" role="tab">Registo de Pagamentos</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="obraTabsContent">
+
+    <!-- 🧾 Aba: Dados Gerais -->
+    <div class="tab-pane fade show active" id="dados" role="tabpanel">
+        <h4>📋 Dados Gerais</h4>
+        <dl class="row">
+            <dt class="col-sm-1">Descrição:</dt>
+            <dd class="col-sm-5">@Model.Descricao</dd>
+
+            <dt class="col-sm-1">Morada:</dt>
+            <dd class="col-sm-5">@Model.Morada</dd>
+
+            <dt class="col-sm-1">Cliente:</dt>
+            <dd class="col-sm-5">@Model.Cliente?.Nome</dd>
+
+            <dt class="col-sm-1">Ativa:</dt>
+            <dd class="col-sm-5">@(Model.Ativa ? "Sim" : "Não")</dd>
+        </dl>
+
+        <hr />
+
+        <!-- 🧱 Materiais Utilizados -->
+        <h5>🧱 Materiais Utilizados</h5>
+        @if (Model.Materiais != null && Model.Materiais.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Material</th>
+                        <th>Quantidade</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in Model.Materiais)
+                    {
+                        <tr>
+                            <td>@m.Material?.Nome</td>
+                            <td>@m.Quantidade</td>
+                            <td>@m.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Sem materiais registados.</p>
+        }
+
+        <hr />
+
+        <!-- 👷 Registos de Mão de Obra -->
+        <h5>👷 Registos de Mão de Obra</h5>
+        @if (Model.MaoDeObra != null && Model.MaoDeObra.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Horas</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model.MaoDeObra)
+                    {
+                        <tr>
+                            <td>@o.Pessoa</td>
+                            <td>@o.HorasTrabalhadas</td>
+                            <td>@o.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Sem registos de mão de obra.</p>
+        }
+
+        <hr />
+
+        <!-- 💶 Pagamentos Efetuados -->
+        <h5>💶 Pagamentos Efetuados</h5>
+        @if (Model.Pagamentos != null && Model.Pagamentos.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Valor (€)</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Pagamentos)
+                    {
+                        <tr>
+                            <td>@p.Pessoa</td>
+                            <td>@p.Valor</td>
+                            <td>@p.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Sem pagamentos registados.</p>
+        }
+
+        <hr />
+
+        <!-- 📦 Movimentos de Stock -->
+        <h5>📦 Movimentos de Stock</h5>
+        @if (Model.MovimentosStock != null && Model.MovimentosStock.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Material</th>
+                        <th>Operação</th>
+                        <th>Quantidade</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var mov in Model.MovimentosStock)
+                    {
+                        <tr>
+                            <td>@mov.Material?.Nome</td>
+                            <td>@mov.Operacao</td>
+                            <td>@mov.Quantidade</td>
+                            <td>@mov.DataOperacao.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Sem movimentos registados.</p>
+        }
+    </div>
+
+    <!-- 🧱 Aba Registo de Material -->
+    <div class="tab-pane fade" id="materiais" role="tabpanel">
+        <form asp-controller="Obras" asp-action="AdicionarMaterial" method="post" class="mb-4">
+            <input type="hidden" name="ObraId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Material</label>
+                <select class="form-select" name="MaterialId">
+                    @foreach (var material in ViewBag.Materiais)
+                    {
+                        <option value="@material.Id">@material.Nome</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Quantidade</label>
+                <input type="number" class="form-control" name="Quantidade" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Adicionar Material</button>
+        </form>
+    </div>
+
+    <!-- 👷 Aba Registo de Mão de Obra -->
+    <div class="tab-pane fade" id="mao" role="tabpanel">
+        <form asp-controller="Obras" asp-action="AdicionarMaoDeObra" method="post" class="mb-4">
+            <input type="hidden" name="ObraId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Nome da Pessoa</label>
+                <input type="text" class="form-control" name="Pessoa" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Horas Trabalhadas</label>
+                <input type="number" class="form-control" name="HorasTrabalhadas" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registar Mão de Obra</button>
+        </form>
+    </div>
+
+    <!-- 💶 Aba Registo de Pagamentos -->
+    <div class="tab-pane fade" id="pagamentos" role="tabpanel">
+        <form asp-controller="Obras" asp-action="AdicionarPagamento" method="post" class="mb-4">
+            <input type="hidden" name="ObraId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Nome da Pessoa</label>
+                <input type="text" class="form-control" name="Pessoa" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Valor (€)</label>
+                <input type="number" step="0.01" class="form-control" name="Valor" required />
+            </div>
+
+            <button type="submit" class="btn btn-success">Adicionar Pagamento</button>
+        </form>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
