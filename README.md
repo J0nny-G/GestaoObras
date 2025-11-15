@@ -1,24 +1,81 @@
-Gestão de Obras — Projeto MVC (.NET + PostgreSQL)
+# Gestão de Obras
 
-Este projeto consiste numa aplicação web de gestão de obras, desenvolvida em ASP.NET Core MVC com Entity Framework Core e base de dados PostgreSQL.
+Aplicação Web desenvolvida em ASP.NET Core MVC com Entity Framework Core e PostgreSQL.
+O projeto permite gerir Clientes, Materiais, Obras e os respetivos registos de Material, Mão de Obra e Pagamentos.
 
-1. Requisitos para correr o projeto
+---
 
-Antes de iniciar, garanta que tem instalados:
+## 1. Requisitos
 
-✔️ .NET 7 ou superior
+* .NET 7 ou superior
+* PostgreSQL 15+
+* pgAdmin (opcional)
+* Docker (opcional)
 
-https://dotnet.microsoft.com/
-ss
-✔️ PostgreSQL 15+ ou Docker (recomendado)
+---
 
-Pode usar:
+## 2. Base de Dados (sem Docker)
 
-PostgreSQL instalado localmente
+Criar a base de dados:
 
-ou o container Docker incluído no projeto
+```sql
+CREATE DATABASE gestaoobras;
+```
 
-✔️ pgAdmin (opcional)
+Se estiveres a usar o ficheiro `.sql` incluído, importa-o usando:
 
-Para explorar a base de dados graficamente.
-https://www.pgadmin.org/
+```bash
+psql -U postgres -d gestaoobras -f backup_gestaoobras.sql
+```
+
+---
+
+## 3. Executar Base de Dados via Docker
+
+Na raiz do projeto:
+
+```bash
+docker compose up -d
+```
+
+---
+
+## 4. Executar Projeto
+
+Dentro da pasta principal do projeto:
+
+```bash
+dotnet restore
+dotnet build
+dotnet run
+```
+
+A aplicação ficará disponível em:
+
+```
+http://localhost:5225
+```
+
+---
+
+## 5. Funcionalidades
+
+* Gestão de Clientes (CRUD)
+* Gestão de Materiais (CRUD)
+* Gestão de Obras (CRUD)
+* Registo de Material utilizado numa obra
+* Registo de Mão de Obra
+* Registo de Pagamentos
+* Movimentos de Stock (menu dedicado)
+
+---
+
+## 6. Estrutura do Projeto
+
+* **Models/** – Classes da aplicação
+* **Controllers/** – Lógica de controlo
+* **Views/** – Interface da aplicação
+* **Data/AppDbContext.cs** – Configuração do Entity Framework
+* **docker-compose.yml** – Base de dados PostgreSQL
+
+---
