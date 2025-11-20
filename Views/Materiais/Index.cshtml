@@ -1,13 +1,13 @@
 @model IEnumerable<GestaoObras.Models.Material>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Materiais";
 }
 
-<h1>Index</h1>
+<h1>Materiais</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary" >Registar Materiais</a>
 </p>
 <table class="table">
     <thead>
@@ -36,17 +36,33 @@
             <td>
                 @Html.DisplayFor(modelItem => item.StockDisponivel)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                <form asp-action="AdicionarStock" method="post" style="display:inline;">
+            <td class="text-nowrap">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-2">
+                    <i class="bi bi-pencil"></i> Editar
+                </a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-2">
+                    <i class="bi bi-eye"></i> Detalhes
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm me-2">
+                    <i class="bi bi-trash"></i> Eliminar
+                </a>
+                <form asp-action="AdicionarStock" method="post" class="d-inline-flex align-items-center ms-2">
                     <input type="hidden" name="id" value="@item.Id" />
-                    <input type="number" name="quantidade" min="1" value="1" class="form-control d-inline w-auto" />
-                    <button type="submit" class="btn btn-sm btn-success">+ Stock</button>
+
+                    <input type="number"
+                        name="quantidade"
+                        min="1"
+                        value="1"
+                        class="form-control form-control-sm me-1"
+                        style="width:70px;" />
+
+                    <button type="submit" class="btn btn-success btn-sm">
+                        + Stock
+                    </button>
                 </form>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Voltar à Página Inicial</a>

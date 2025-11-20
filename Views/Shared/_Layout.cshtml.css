@@ -46,3 +46,57 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+
+/* === Sidebar / Admin-like Layout === */
+
+#app-wrapper {
+    min-height: 100vh;
+}
+
+/* Sidebar base */
+#sidebar {
+    width: 250px;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Links do menu */
+#sidebar .sidebar-link {
+    border-radius: 0.375rem;
+    padding: 0.45rem 0.75rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+#sidebar .sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+}
+
+/* Topbar */
+.topbar {
+    z-index: 10;
+}
+
+/* Mobile: sidebar desliza por cima */
+@media (max-width: 767.98px) {
+    #sidebar {
+        position: fixed;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease-in-out;
+        z-index: 1050;
+    }
+
+    #sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    #page-content {
+        width: 100%;
+    }
+}

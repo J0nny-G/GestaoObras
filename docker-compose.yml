@@ -3,7 +3,7 @@ version: '3.9'
 services:
   postgres:
     image: postgres:16
-    container_name: postgres
+    container_name: gestaoobras-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -13,6 +13,21 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - gestao-network
+
+  web:
+    build: .
+    container_name: gestaoobras-web
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gestaoobras;Username=postgres;Password=123456"
+    ports:
+      - "5225:8080"
+    networks:
+      - gestao-network
 
 volumes:
   pg_data:
