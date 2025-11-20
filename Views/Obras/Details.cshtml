@@ -16,16 +16,24 @@
 
 <ul class="nav nav-tabs" id="obraTabs" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="dados-tab" data-bs-toggle="tab" data-bs-target="#dados" type="button" role="tab">Dados Gerais</button>
+        <button class="nav-link active" id="dados-tab" data-bs-toggle="tab" data-bs-target="#dados" type="button" role="tab">
+            Dados Gerais
+        </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="materiais-tab" data-bs-toggle="tab" data-bs-target="#materiais" type="button" role="tab">Registo de Material</button>
+        <button class="nav-link" id="materiais-tab" data-bs-toggle="tab" data-bs-target="#materiais" type="button" role="tab">
+            Registo de Material
+        </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="mao-tab" data-bs-toggle="tab" data-bs-target="#mao" type="button" role="tab">Registo de Mão de Obra</button>
+        <button class="nav-link" id="mao-tab" data-bs-toggle="tab" data-bs-target="#mao" type="button" role="tab">
+            Registo de Mão de Obra
+        </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pagamentos-tab" data-bs-toggle="tab" data-bs-target="#pagamentos" type="button" role="tab">Registo de Pagamentos</button>
+        <button class="nav-link" id="pagamentos-tab" data-bs-toggle="tab" data-bs-target="#pagamentos" type="button" role="tab">
+            Registo de Pagamentos
+        </button>
     </li>
 </ul>
 
@@ -35,17 +43,17 @@
     <div class="tab-pane fade show active" id="dados" role="tabpanel">
         <h4>📋 Dados Gerais</h4>
         <dl class="row">
-            <dt class="col-sm-1">Descrição:</dt>
-            <dd class="col-sm-5">@Model.Descricao</dd>
+            <dt class="col-sm-2">Descrição:</dt>
+            <dd class="col-sm-4">@Model.Descricao</dd>
 
-            <dt class="col-sm-1">Morada:</dt>
-            <dd class="col-sm-5">@Model.Morada</dd>
+            <dt class="col-sm-2">Morada:</dt>
+            <dd class="col-sm-4">@Model.Morada</dd>
 
-            <dt class="col-sm-1">Cliente:</dt>
-            <dd class="col-sm-5">@Model.Cliente?.Nome</dd>
+            <dt class="col-sm-2">Cliente:</dt>
+            <dd class="col-sm-4">@Model.Cliente?.Nome</dd>
 
-            <dt class="col-sm-1">Ativa:</dt>
-            <dd class="col-sm-5">@(Model.Ativa ? "Sim" : "Não")</dd>
+            <dt class="col-sm-2">Ativa:</dt>
+            <dd class="col-sm-4">@(Model.Ativa ? "Sim" : "Não")</dd>
         </dl>
 
         <hr />
@@ -144,65 +152,143 @@
 
     <!-- 🧱 Aba Registo de Material -->
     <div class="tab-pane fade" id="materiais" role="tabpanel">
-        <form asp-controller="Obras" asp-action="AdicionarMaterial" method="post" class="mb-4">
-            <input type="hidden" name="ObraId" value="@Model.Id" />
 
-            <div class="mb-3">
-                <label class="form-label">Material</label>
-                <select class="form-select" name="MaterialId">
-                    @foreach (var material in ViewBag.Materiais)
-                    {
-                        <option value="@material.Id">@material.Nome</option>
-                    }
-                </select>
+        <!-- Mensagens de erro / sucesso (TempData) -->
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger d-flex align-items-center">
+                <i class="bi bi-x-circle fs-5 me-2"></i>
+                @TempData["Erro"]
             </div>
+        }
 
-            <div class="mb-3">
-                <label class="form-label">Quantidade</label>
-                <input type="number" class="form-control" name="Quantidade" required />
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success d-flex align-items-center">
+                <i class="bi bi-check-circle fs-5 me-2"></i>
+                @TempData["Sucesso"]
             </div>
+        }
 
-            <button type="submit" class="btn btn-primary">Adicionar Material</button>
-        </form>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-plus-circle me-2 text-primary"></i>
+                    Adicionar Material à Obra
+                </h5>
+
+                <form asp-controller="Obras" asp-action="AdicionarMaterial" method="post">
+                    <input type="hidden" name="ObraId" value="@Model.Id" />
+
+                    <!-- SELECT Material -->
+                    <div class="mb-3">
+                        <label class="form-label">Material</label>
+                        <select class="form-select" name="MaterialId" required>
+                            <option value="" disabled selected>Selecione um material...</option>
+
+                            @foreach (var material in ViewBag.Materiais)
+                            {
+                                <option value="@material.Id"
+                                        disabled="@(material.StockDisponivel == 0 ? "disabled" : null)">
+                                    @material.Nome (@material.StockDisponivel disponíveis)
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Campo Quantidade -->
+                    <div class="mb-3">
+                        <label class="form-label">Quantidade</label>
+                        <input type="number"
+                               class="form-control"
+                               name="Quantidade"
+                               min="1"
+                               required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Adicionar Material
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- 👷 Aba Registo de Mão de Obra -->
     <div class="tab-pane fade" id="mao" role="tabpanel">
-        <form asp-controller="Obras" asp-action="AdicionarMaoDeObra" method="post" class="mb-4">
-            <input type="hidden" name="ObraId" value="@Model.Id" />
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-people-fill me-2 text-primary"></i>
+                    Registar Mão de Obra
+                </h5>
 
-            <div class="mb-3">
-                <label class="form-label">Nome da Pessoa</label>
-                <input type="text" class="form-control" name="Pessoa" required />
+                <form asp-controller="Obras" asp-action="AdicionarMaoDeObra" method="post">
+                    <input type="hidden" name="ObraId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Nome da Pessoa</label>
+                        <input type="text" class="form-control" name="Pessoa" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Horas Trabalhadas</label>
+                        <input type="number" class="form-control" name="HorasTrabalhadas" min="0.1" step="0.1" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Registar Mão de Obra</button>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Horas Trabalhadas</label>
-                <input type="number" class="form-control" name="HorasTrabalhadas" required />
-            </div>
-
-            <button type="submit" class="btn btn-primary">Registar Mão de Obra</button>
-        </form>
+        </div>
     </div>
 
     <!-- 💶 Aba Registo de Pagamentos -->
     <div class="tab-pane fade" id="pagamentos" role="tabpanel">
-        <form asp-controller="Obras" asp-action="AdicionarPagamento" method="post" class="mb-4">
-            <input type="hidden" name="ObraId" value="@Model.Id" />
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-cash-coin me-2 text-success"></i>
+                    Registar Pagamento
+                </h5>
 
-            <div class="mb-3">
-                <label class="form-label">Nome da Pessoa</label>
-                <input type="text" class="form-control" name="Pessoa" required />
+                <form asp-controller="Obras" asp-action="AdicionarPagamento" method="post" class="mb-4">
+                    <input type="hidden" name="ObraId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Nome da Pessoa</label>
+                        <input type="text" class="form-control" name="Pessoa" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Valor (€)</label>
+                        <input type="number" step="0.01" class="form-control" name="Valor" min="0.01" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Adicionar Pagamento</button>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Valor (€)</label>
-                <input type="number" step="0.01" class="form-control" name="Valor" required />
-            </div>
-
-            <button type="submit" class="btn btn-success">Adicionar Pagamento</button>
-        </form>
+        </div>
     </div>
 </div>
 
 <a asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hash = window.location.hash;
+            if (!hash) return;
+
+            // Procurar o botão da tab correspondente ao hash (#materiais, #mao, #pagamentos, etc.)
+            const tabTrigger = document.querySelector(
+                `#obraTabs button[data-bs-toggle="tab"][data-bs-target="${hash}"]`
+            );
+
+            if (tabTrigger) {
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+            }
+        });
+    </script>
+}

@@ -177,36 +177,56 @@ namespace GestaoObras.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AdicionarMaterial(int ObraId, int MaterialId, int Quantidade)
         {
-            var material = await _context.Materiais.FindAsync(MaterialId);
-            if (material != null)
+            if (Quantidade <= 0)
             {
-                var registo = new ObraMaterial
-                {
-                    ObraId = ObraId,
-                    MaterialId = MaterialId,
-                    Quantidade = Quantidade,
-                    DataHora = DateTime.UtcNow
-                };
-
-                _context.ObrasMateriais.Add(registo);
-                _context.MovimentosStock.Add(new MovimentoStock
-                {
-                    ObraId = ObraId,
-                    MaterialId = MaterialId,
-                    Operacao = "REMOVE",
-                    Quantidade = Quantidade,
-                    DataOperacao = DateTime.UtcNow
-                });
-
-                material.StockDisponivel -= Quantidade;
-
-                await _context.SaveChangesAsync();
+                TempData["Erro"] = "A quantidade deve ser superior a zero.";
+                return Redirect(Url.Action(nameof(Details), new { id = ObraId }) + "#materiais");
             }
 
-            return RedirectToAction(nameof(Details), new { id = ObraId });
+            var material = await _context.Materiais.FindAsync(MaterialId);
+            if (material == null)
+            {
+                TempData["Erro"] = "O material selecionado não existe.";
+                return Redirect(Url.Action(nameof(Details), new { id = ObraId }) + "#materiais");
+            }
+
+            if (Quantidade > material.StockDisponivel)
+            {
+                TempData["Erro"] = $"Stock insuficiente. Disponível: {material.StockDisponivel}.";
+                return Redirect(Url.Action(nameof(Details), new { id = ObraId }) + "#materiais");
+            }
+
+            var registo = new ObraMaterial
+            {
+                ObraId = ObraId,
+                MaterialId = MaterialId,
+                Quantidade = Quantidade,
+                DataHora = DateTime.UtcNow
+            };
+
+            _context.ObrasMateriais.Add(registo);
+
+            _context.MovimentosStock.Add(new MovimentoStock
+            {
+                ObraId = ObraId,
+                MaterialId = MaterialId,
+                Operacao = "REMOVE",
+                Quantidade = Quantidade,
+                DataOperacao = DateTime.UtcNow
+            });
+
+            material.StockDisponivel -= Quantidade;
+
+            await _context.SaveChangesAsync();
+
+            TempData["Sucesso"] = "Material adicionado à obra com sucesso!";
+            return Redirect(Url.Action(nameof(Details), new { id = ObraId }) + "#materiais");
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> AdicionarMaoDeObra(int ObraId, string Pessoa, double HorasTrabalhadas)

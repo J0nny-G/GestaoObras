@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace GestaoObras.Models
 {
     public class ObraMaterial
@@ -11,6 +13,7 @@ namespace GestaoObras.Models
         public int MaterialId { get; set; }
         public Material? Material { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser pelo menos 1.")]
         public int Quantidade { get; set; }
         public DateTime DataHora { get; set; } = DateTime.UtcNow;
     }
