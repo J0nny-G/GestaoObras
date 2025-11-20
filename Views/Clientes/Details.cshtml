@@ -4,11 +4,16 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Detalhes</h1>
+<div class="alert alert-info d-flex align-items-start">
+    <i class="bi bi-info-circle fs-4 me-3"></i>
+    <div>
+        <h5 class="fw-bold mb-1">Detalhes do Cliente</h5>
+        <small class="text-muted">Informações completas deste cliente.</small>
+    </div>
+</div>
 
 <div>
-    <h4>Cliente</h4>
-    <hr />s
+    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nome)
