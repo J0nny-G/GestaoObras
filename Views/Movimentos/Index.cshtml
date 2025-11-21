@@ -4,75 +4,106 @@
     ViewData["Title"] = "Movimentos de Stock";
 }
 
-<h2>Movimentos de Stock</h2>
-
-<p class="text-muted">Consulta e filtragem dos movimentos de materiais registados nas obras.</p>
+<div class="alert alert-info d-flex align-items-start mb-4">
+    <i class="bi bi-arrows-move fs-4 me-3"></i>
+    <div>
+        <h5 class="fw-bold mb-1">Movimentos de Stock</h5>
+        <small class="text-muted">Consulta e filtragem dos movimentos de materiais entre obras.</small>
+    </div>
+</div>
 
 <!-- 🔍 Filtro -->
-<form method="get" class="mb-3">
-    <div class="row g-2 align-items-end">
-        <div class="col-md-4">
-            <label class="form-label">Selecionar Obra</label>
-            <select class="form-select" name="obraId" onchange="this.form.submit()">
-                <option value="">-- Todas as Obras --</option>
-                @foreach (var obra in (SelectList)ViewBag.Obras)
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <h5 class="fw-bold mb-3">
+            <i class="bi bi-funnel me-2 text-primary"></i>
+            Filtrar Movimentos
+        </h5>
+
+        <form method="get">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Selecionar Obra</label>
+                    <select class="form-select" name="obraId" onchange="this.form.submit()">
+                        <option value="">-- Todas as Obras --</option>
+
+                        @foreach (var obra in (SelectList)ViewBag.Obras)
+                        {
+                            <option value="@obra.Value" selected="@(obra.Value == Context.Request.Query["obraId"].ToString() ? "selected" : null)">
+                                @obra.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 📋 Tabela -->
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-3">
+            <i class="bi bi-list-check me-2 text-success"></i>
+            Registos de Movimentos
+        </h5>
+
+        <table class="table table-striped table-hover align-middle table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Obra</th>
+                    <th>Cliente</th>
+                    <th>Material</th>
+                    <th>Operação</th>
+                    <th>Quantidade</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
                 {
-                    @if (obra.Value == Context.Request.Query["obraId"])
+                    @foreach (var mov in Model)
                     {
-                        <option value="@obra.Value" selected>@obra.Text</option>
-                    }
-                    else
-                    {
-                        <option value="@obra.Value">@obra.Text</option>
+                        <tr>
+                            <td>@mov.Obra?.Nome</td>
+                            <td>@mov.Obra?.Cliente?.Nome</td>
+                            <td>@mov.Material?.Nome</td>
+
+                            <td>
+                                @if (mov.Operacao == "REMOVE")
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-dash-circle"></i> REMOVE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-plus-circle"></i> ADD
+                                    </span>
+                                }
+                            </td>
+
+                            <td>@mov.Quantidade</td>
+                            <td>@mov.DataOperacao.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
                     }
                 }
-            </select>
-        </div>
-    </div>
-</form>
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-3">
+                            Nenhum movimento encontrado.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-<!-- 📋 Tabela de Movimentos -->
-<table class="table table-striped table-bordered table-sm">
-    <thead class="table-light">
-        <tr>
-            <th>Obra</th>
-            <th>Cliente</th>
-            <th>Material</th>
-            <th>Operação</th>
-            <th>Quantidade</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            @foreach (var mov in Model)
-            {
-                <tr>
-                    <td>@mov.Obra?.Nome</td>
-                    <td>@mov.Obra?.Cliente?.Nome</td>
-                    <td>@mov.Material?.Nome</td>
-                    <td>
-                        @if (mov.Operacao == "REMOVE")
-                        {
-                            <span class="text-danger fw-bold">- REMOVE</span>
-                        }
-                        else
-                        {
-                            <span class="text-success fw-bold">+ ADD</span>
-                        }
-                    </td>
-                    <td>@mov.Quantidade</td>
-                    <td>@mov.DataOperacao.ToString("dd/MM/yyyy HH:mm")</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6" class="text-center text-muted">Nenhum movimento encontrado.</td>
-            </tr>
-        }
-    </tbody>
-</table>
-<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Voltar à Página Inicial</a>
+    </div>
+</div>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Voltar à Página Inicial
+</a>

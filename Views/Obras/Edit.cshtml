@@ -1,10 +1,10 @@
 @model GestaoObras.Models.Obra
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Obra";
 }
 
-<div class="alert alert-primary d-flex align-items-start">
+<div class="alert alert-primary d-flex align-items-start mb-4">
     <i class="bi bi-pencil-square fs-4 me-3"></i>
     <div>
         <h5 class="fw-bold mb-1">Editar Obra</h5>
@@ -12,61 +12,88 @@
     </div>
 </div>
 
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control" />
-                <span asp-validation-for="Descricao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Morada" class="control-label"></label>
-                <input asp-for="Morada" class="form-control" />
-                <span asp-validation-for="Morada" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Ativa" /> @Html.DisplayNameFor(model => model.Ativa)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label">Cliente</label>
-                <select asp-for="ClienteId" class="form-select" asp-items="ViewBag.ClienteId">
-                    <option value="">-- Selecionar Cliente --</option>
-                </select>
-                <span asp-validation-for="ClienteId" class="text-danger"></span>
-            </div>
-                       <div class="form-group mt-3">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
 
-                <button type="submit" class="btn btn-primary me-2">
-                    <i class="bi bi-save"></i> Guardar
-                </button>
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-building-gear me-2 text-primary"></i>
+                    Dados da Obra
+                </h5>
 
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Voltar
-                </a>
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Nome" class="form-label"></label>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Descricao" class="form-label"></label>
+                        <textarea asp-for="Descricao" class="form-control"></textarea>
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Morada" class="form-label"></label>
+                        <input asp-for="Morada" class="form-control" />
+                        <span asp-validation-for="Morada" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Latitude" class="form-label">Latitude</label>
+                        <input asp-for="Latitude"
+                               class="form-control"
+                               type="number"
+                               step="0.000001"
+                               min="-90"
+                               max="90" />
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Longitude" class="form-label">Longitude</label>
+                        <input asp-for="Longitude"
+                               class="form-control"
+                               type="number"
+                               step="0.000001"
+                               min="-180"
+                               max="180" />
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" asp-for="Ativa" />
+                        <label class="form-check-label" asp-for="Ativa">
+                            @Html.DisplayNameFor(model => model.Ativa)
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ClienteId" class="form-label">Cliente</label>
+                        <select asp-for="ClienteId" class="form-select" asp-items="ViewBag.ClienteId">
+                            <option value="">-- Selecionar Cliente --</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                </form>
 
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

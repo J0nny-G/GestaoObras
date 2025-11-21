@@ -4,65 +4,91 @@
     ViewData["Title"] = "Materiais";
 }
 
-<h1>Materiais</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">
+            <i class="bi bi-box-seam me-2 text-primary"></i> Materiais
+        </h3>
+        <small class="text-muted">Gestão dos materiais e respetivo stock.</small>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary" >Registar Materiais</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockDisponivel)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StockDisponivel)
-            </td>
-            <td class="text-nowrap">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-2">
-                    <i class="bi bi-pencil"></i> Editar
-                </a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-2">
-                    <i class="bi bi-eye"></i> Detalhes
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm me-2">
-                    <i class="bi bi-trash"></i> Eliminar
-                </a>
-                <form asp-action="AdicionarStock" method="post" class="d-inline-flex align-items-center ms-2">
-                    <input type="hidden" name="id" value="@item.Id" />
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Registar Material
+    </a>
+</div>
 
-                    <input type="number"
-                        name="quantidade"
-                        min="1"
-                        value="1"
-                        class="form-control form-control-sm me-1"
-                        style="width:70px;" />
+<div class="card shadow-sm border-0">
+    <div class="card-body">
 
-                    <button type="submit" class="btn btn-success btn-sm">
-                        + Stock
-                    </button>
-                </form>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Voltar à Página Inicial</a>
+        @if (!Model.Any())
+        {
+            <p class="text-muted mb-0">Ainda não existem materiais registados.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td class="text-muted">@item.Descricao</td>
+
+                            <!-- Stock simples, sem cores -->
+                            <td class="text-center">
+                                @item.StockDisponivel
+                            </td>
+
+                            <td class="text-end text-nowrap">
+
+                                <!-- Botões principais -->
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-1">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm me-2">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                                <!-- Adicionar Stock -->
+                                <form asp-action="AdicionarStock" 
+                                      method="post" 
+                                      class="d-inline-flex align-items-center">
+                                    <input type="hidden" name="id" value="@item.Id" />
+
+                                    <input type="number"
+                                           name="quantidade"
+                                           min="1"
+                                           value="1"
+                                           class="form-control form-control-sm me-1 text-center"
+                                           style="width:70px;" />
+
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Voltar à Página Inicial
+</a>

@@ -4,46 +4,67 @@
     ViewData["Title"] = "Clientes";
 }
 
-<h1>Clientes</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">
+            <i class="bi bi-people-fill me-2 text-primary"></i> Clientes
+        </h3>
+        <small class="text-muted">Gestão de clientes associados às obras.</small>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary" >Adicionar Cliente</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NIF)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NIF)
-            </td>
-            <td class="text-nowrap">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-2">
-                    <i class="bi bi-pencil"></i> Editar
-                </a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-2">
-                    <i class="bi bi-eye"></i> Detalhes
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
-                    <i class="bi bi-trash"></i> Eliminar
-                </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-<div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Voltar à Página Inicial</a>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-person-plus-fill"></i> Adicionar Cliente
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        @if (!Model.Any())
+        {
+            <p class="text-muted mb-0">Ainda não existem clientes registados.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                            <th>@Html.DisplayNameFor(model => model.NIF)</th>
+                            <th>@Html.DisplayNameFor(model => model.Telefone)</th>
+                            <th>@Html.DisplayNameFor(model => model.Email)</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td>@item.NIF</td>
+                            <td>@item.Telefone</td>
+                            <td>@item.Email</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-1">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Voltar à Página Inicial
+</a>
