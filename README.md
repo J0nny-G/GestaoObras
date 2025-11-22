@@ -7,8 +7,7 @@ O projeto permite gerir Clientes, Materiais, Obras e os respetivos registos de M
 O projeto pode ser executado de forma totalmente isolada usando Docker, sem necessidade de instalar .NET ou PostgreSQL localmente.
 
 ### Pré-requisitos
-- Docker instalado  
-- Docker Compose instalado (ou Docker Desktop)
+- Docker instalado
 
 ### Construir e iniciar todos os serviços
 

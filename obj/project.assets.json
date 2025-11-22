@@ -7757,11 +7757,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joao_\\GestaoObras\\GestaoObras.csproj",
+      "projectUniqueName": "C:\\Users\\joao_\\Documents\\Mestrado\\Desenvolvimento Web e para a Cloud\\GestaoObras\\GestaoObras.csproj",
       "projectName": "GestaoObras",
-      "projectPath": "C:\\Users\\joao_\\GestaoObras\\GestaoObras.csproj",
+      "projectPath": "C:\\Users\\joao_\\Documents\\Mestrado\\Desenvolvimento Web e para a Cloud\\GestaoObras\\GestaoObras.csproj",
       "packagesPath": "C:\\Users\\joao_\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joao_\\GestaoObras\\obj\\",
+      "outputPath": "C:\\Users\\joao_\\Documents\\Mestrado\\Desenvolvimento Web e para a Cloud\\GestaoObras\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\joao_\\AppData\\Roaming\\NuGet\\NuGet.Config"
